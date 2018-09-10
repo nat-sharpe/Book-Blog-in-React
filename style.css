@@ -8,15 +8,6 @@ html, body {
     align-items: center;
 }
 
-footer {
-    color: darkslateblue;
-    text-align: center;
-}
-
-h2 {
-    margin: .2em;
-}
-
 .react-root {
     width: 50%;
     padding: 30px;
@@ -29,9 +20,32 @@ h2 {
 
 .book-list {
     color: darkslateblue;
+    list-style: none;
 }
 
-.book-content {
+.book-item {
+    margin-top: 3em;
+}
+
+.sub-title {
+    margin: .2em;
+}
+
+.book-main {
+    display: flex;
+}
+
+.book-description {
     color: gray;
     margin-top: 0;
+}
+
+.book-image {
+    height: 12em;
+    margin-right: 1em;
+}
+
+.footer {
+    color: darkslateblue;
+    text-align: center;
 }
