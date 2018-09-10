@@ -28,22 +28,22 @@ let books = [
 let h = React.createElement;
 
 let blogPost = books.map(book => {
-    return [h('li', { className: 'book-item' }, [
-        h('h2', { className: 'book-title' }, [`${book.title}`,]),
-        h('div', { className: 'book-main' }, [
+    return h('li', { className: 'book-item' }, 
+        h('h2', { className: 'book-title' }, `${book.title}`,),
+        h('div', { className: 'book-main' },
             h('img', { className: 'book-image', src: book.imgURL }),
             h('div', { className: 'book-body' }, 
-                h('h3', { className: 'sub-title' }, [`${book.author} wrote ${book.title} in ${book.date}.`]),
-                h('p', { className: 'book-description' }, [book.content]),
-            )]
-        )]
-    )]
+                h('h3', { className: 'sub-title' }, `${book.author} wrote ${book.title} in ${book.date}.`),
+                h('p', { className: 'book-description' }, book.content),
+            )
+        )
+    )
 });
 
 let content = h('div', null, [
-    h('h1', { className: 'big-text' }, ['SOME COOL BOOKS']),
-    h('ul', { className: 'book-list' }, [blogPost]),
-    h('footer', { className: 'footer' }, ['Copyright 2018']),
+    h('h1', { className: 'big-text' }, 'SOME COOL BOOKS'),
+    h('ul', { className: 'book-list' }, blogPost),
+    h('footer', { className: 'footer' }, 'John Lennon © 2018'),
 ]);
 
 ReactDOM.render(content, document.querySelector('.react-root'));

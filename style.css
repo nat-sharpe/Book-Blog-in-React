@@ -28,7 +28,8 @@ html, body {
 }
 
 .sub-title {
-    margin: .2em;
+    margin: 0;
+    margin-bottom: .3em;
 }
 
 .book-main {
