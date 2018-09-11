@@ -50,23 +50,34 @@ let bookData2 = [
 
 let h = React.createElement;
 
+let switchImageURL = props => {
+    let newBooks = bookData1.map(book =>
+        (book.id === props.id) ?
+            Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
+        :
+            book
+    )
+    bookData1 = newBooks;
+    rerender();
+}
+
+let snakify = props => {
+    let newBooks = bookData1.map(book =>
+        (book.id === props.id) ?
+            Object.assign({}, book, {title: book.title + '🐍'})
+        :
+            book
+    );
+    bookData1 = newBooks;
+    rerender();
+};
+
 let BlogRow = props =>
     h('li', { className: 'book-item' }, 
         h('h2', { className: 'book-title' }, `${props.title}`,),
         h('div', { className: 'book-main' },
             h('img', { className: 'book-image', src: props.imgURL, 
-                onClick: () => {
-                    let newBooks = bookData1.map(book => {
-                        if (book.id === props.id) {
-                            book.imgURL = 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg';
-                            return book;
-                        } else { 
-                            return book
-                        }
-                    })
-                    bookData1 = newBooks;
-                    rerender();
-                }
+                onClick: () => switchImageURL(props)
             }),
             h('div', { className: 'book-body' }, 
                 h('h3', { className: 'sub-title' }, 
@@ -76,17 +87,7 @@ let BlogRow = props =>
                 h('p', { className: 'book-description' }, props.content),
                 h('button', {
                     onClick: () => {
-                        let newBooks = bookData1.map(book => {
-                            if (book.id === props.id) {
-                                let newTitle = book;
-                                newTitle.title = book.title+= 's';
-                                return newTitle;
-                            } else { 
-                                return book
-                            }
-                        })
-                        bookData1 = newBooks;
-                        rerender();
+                        snakify(props);
                     }
                 }, ['Snakify'])
             )
