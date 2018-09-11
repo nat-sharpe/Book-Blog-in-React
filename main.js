@@ -46,35 +46,54 @@ let BlogRow = props =>
     h('li', { className: 'book-item' }, 
         h('h2', { className: 'book-title' }, `${props.title}`,),
         h('div', { className: 'book-main' },
-            h('img', { className: 'book-image', src: props.imgURL }),
+            h('img', { className: 'book-image', src: props.imgURL, 
+                onClick: () => {
+                    bookData1 = bookData1.filter(book => book.title !== props.title);
+                    rerender();
+                }
+            }),
             h('div', { className: 'book-body' }, 
                 h('h3', { className: 'sub-title' }, 
                     [`${props.author} wrote `,
                     h('em', null, props.title),
                     ` in ${props.date}.`]),
                 h('p', { className: 'book-description' }, props.content),
+                h('button', {
+                    onClick: () => {
+                        let newBooks = bookData1.map(book => {
+                            if (book.title === props.title) {
+                                book.title+= 's';
+                                return book;
+                            } else { 
+                                return book
+                            }
+                        })
+                        bookData1 = newBooks;
+                        rerender();
+                    }
+                }, ['Snakify'])
             )
         )
     );
 
 let BookList = props =>
     h('ul', { className: 'book-list' }, 
-        props.books.map(book => h(BlogRow, book))   
+        props.data.map(book => h(BlogRow, book))   
     );
 
 let Header = props => h('h1', { className: 'big-text' }, props.header);
+
 let Footer = props => h('footer', { className: 'footer' }, props.footer);
 
-let HomePage = () =>
+let HomePage = (props) =>
     h('div', null, [
         h(Header, { header: 'SOME COOL BOOKS' }),
-        h(BookList, { books: bookData1 }),
-        h(Header, { header: 'BWA HA HA HA HA HA!!!' }),
-        h(BookList, { books: bookData2 }),
+        h(BookList, props),
         h(Footer, { footer: 'John Lennon © 2018'}),
     ]);
 
+let rerender = () => {
+    ReactDOM.render(h(HomePage, { data: bookData1 }), document.querySelector('.react-root'));
+};
 
-let vdom = h(HomePage);
-
-ReactDOM.render(vdom, document.querySelector('.react-root'));
+rerender();

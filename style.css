@@ -44,6 +44,11 @@ html, body {
 .book-image {
     height: 12em;
     margin-right: 1em;
+    cursor: pointer;
+}
+
+.book-image:hover {
+    opacity: .5;
 }
 
 .footer {
@@ -52,3 +57,4 @@ html, body {
     margin-top: 5em;
     margin-bottom: 1em;
 }
+
