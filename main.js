@@ -42,38 +42,38 @@ let bookData2 = [
 
 let h = React.createElement;
 
-let BlogRow = book => {
-    return h('li', { className: 'book-item' }, 
-        h('h2', { className: 'book-title' }, `${book.title}`,),
+let BlogRow = props =>
+    h('li', { className: 'book-item' }, 
+        h('h2', { className: 'book-title' }, `${props.title}`,),
         h('div', { className: 'book-main' },
-            h('img', { className: 'book-image', src: book.imgURL }),
+            h('img', { className: 'book-image', src: props.imgURL }),
             h('div', { className: 'book-body' }, 
-                h('h3', { className: 'sub-title' }, `${book.author} wrote ${book.title} in ${book.date}.`),
-                h('p', { className: 'book-description' }, book.content),
+                h('h3', { className: 'sub-title' }, 
+                    [`${props.author} wrote `,
+                    h('em', null, props.title),
+                    ` in ${props.date}.`]),
+                h('p', { className: 'book-description' }, props.content),
             )
         )
-    )
-};
+    );
 
-let BookList = props => {
-    return h('ul', { className: 'book-list' }, 
-    props.books.map(book => h(BlogRow, book))   
-    )
-};
+let BookList = props =>
+    h('ul', { className: 'book-list' }, 
+        props.books.map(book => h(BlogRow, book))   
+    );
 
 let Header = props => h('h1', { className: 'big-text' }, props.header);
-
 let Footer = props => h('footer', { className: 'footer' }, props.footer);
 
-let HomePage = () => {
-    return h('div', null, [
+let HomePage = () =>
+    h('div', null, [
         h(Header, { header: 'SOME COOL BOOKS' }),
         h(BookList, { books: bookData1 }),
         h(Header, { header: 'BWA HA HA HA HA HA!!!' }),
         h(BookList, { books: bookData2 }),
         h(Footer, { footer: 'John Lennon © 2018'}),
     ]);
-};
+
 
 let vdom = h(HomePage);
 
