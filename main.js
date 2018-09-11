@@ -1,4 +1,4 @@
-let books = [
+let bookData = [
     { title: 'Wind in the Willows',
     author: 'JRR Tolkien',
     date: '1995',
@@ -27,7 +27,8 @@ let books = [
 
 let h = React.createElement;
 
-let blogPost = books.map(book => {
+
+let BlogRow = book => {
     return h('li', { className: 'book-item' }, 
         h('h2', { className: 'book-title' }, `${book.title}`,),
         h('div', { className: 'book-main' },
@@ -38,11 +39,17 @@ let blogPost = books.map(book => {
             )
         )
     )
-});
+};
+
+let BookList = props => {
+    return h('ul', { className: 'book-list' }, 
+    props.books.map(book => h(BlogRow, book))   
+    )
+};
 
 let content = h('div', null, [
     h('h1', { className: 'big-text' }, 'SOME COOL BOOKS'),
-    h('ul', { className: 'book-list' }, blogPost),
+    h(BookList, { books: bookData }),
     h('footer', { className: 'footer' }, 'John Lennon © 2018'),
 ]);
 
