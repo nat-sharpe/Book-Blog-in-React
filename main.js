@@ -99,35 +99,49 @@ let Header = props =>
 
 let Footer = props => h('footer', { className: 'footer' }, props.footer);
 
+let bookClicked = false; 
+
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             storeTitleIndex: 0,
-            books: initialBookData
+            books: props.data
         }
     }
 
     render() {
-
+        
         let snakeify = clickedBook => {
-            let newBooks = this.state.books.map(book =>
+            let newBooks = this.state.books.map(book => {
                 (book.id === clickedBook.id) ?
                     Object.assign({}, book, {title: book.title + '🐍'})
                 :
                     book
-            );
+            });
             this.setState({ books: newBooks });
         };
 
         let switchImageURL = clickedImage => {
-            let newBooks = this.state.books.map(book =>
-                (book.id === clickedImage.id) ?
-                    Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
-                :
-                    book
-            );
-            this.setState({ books: newBooks });
+            if (bookClicked) {
+                let oldBooks = this.props.data.map(book =>
+                    (book.id === clickedImage.id) ?
+                        Object.assign({}, book, {imgURL: book.imgURL})
+                    :
+                        book
+                );
+                bookClicked = false;
+                this.setState({ books: oldBooks });
+            } else {
+                let newBooks = this.state.books.map(book =>
+                    (book.id === clickedImage.id) ?
+                        Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
+                    :
+                        book
+                );
+                bookClicked = true;
+                this.setState({ books: newBooks });
+            }
         };
 
         let switchTitle = () => {
