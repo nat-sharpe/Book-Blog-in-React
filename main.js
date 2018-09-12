@@ -123,28 +123,25 @@ class HomePage extends React.Component {
         };
 
         let switchImageURL = clickedImage => {
+            let url;
             if (bookClicked) {
-                let oldBooks = this.props.data.map(book =>
-                    (book.id === clickedImage.id) ?
-                        Object.assign({}, book, {imgURL: book.imgURL})
-                    :
-                        book
-                );
+                this.props.data.forEach(book => {
+                    if (book.id === clickedImage.id) { url = book.imgURL } ;      
+                });
                 bookClicked = false;
-                this.setState({ books: oldBooks });
             } else {
-                let newBooks = this.state.books.map(book =>
-                    (book.id === clickedImage.id) ?
-                        Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
-                    :
-                        book
-                );
+                url = 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg';
                 bookClicked = true;
-                this.setState({ books: newBooks });
             }
+            let newBooks = this.state.books.map(book =>
+                (book.id === clickedImage.id) ?
+                    Object.assign({}, book, {imgURL: url})
+                :
+                    book
+            );
+            this.setState({ books: newBooks });
         };
     
-
         let switchTitle = () => {
             this.setState({
                 storeTitleIndex: (this.state.storeTitleIndex + 1) % titles.length
