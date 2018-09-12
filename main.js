@@ -1,3 +1,5 @@
+const h = React.createElement;
+
 const initialBookData = [
     { 
         id: 1,
@@ -54,26 +56,13 @@ const titles = [
     "RONALD MCDONALD'S HOUSE OF KALE"
 ];
 
-const h = React.createElement;
-
-let switchImageURL = props => {
-    let newBooks = initialBookData.map(book =>
-        (book.id === props.id) ?
-            Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
-        :
-            book
-    )
-    initialBookData = newBooks;
-}
-
 let BlogRow = props =>
     h('li', { className: 'book-item' }, 
         h('h2', { className: 'book-title' }, `${props.book.title}`,),
         h('div', { className: 'book-main' },
             h('img', { className: 'book-image', src: props.book.imgURL, 
                 onClick: () => {
-                    switchImageURL(props.book);
-                    rerender();
+                    props.switchImageURL(props.book);
                 }
             }),
             h('div', { className: 'book-body' }, 
@@ -93,25 +82,12 @@ let BlogRow = props =>
 
 let BookList = props =>
     h('ul', { className: 'book-list' }, 
-        props.books.map(book => h(BlogRow, {book: book, snakify: props.snakify}))   
+        props.books.map(book => h(BlogRow, { book: book, snakify: props.snakify, switchImageURL: props.switchImageURL }))   
     );
 
 let Header = props => h('h1', { className: 'big-text' }, props.text);
 
 let Footer = props => h('footer', { className: 'footer' }, props.footer);
-
-// let HomePage = (props) =>
-//     h('div', null, [
-//         h(Header, props),
-//         h('button', {
-//             onClick: () => {
-//                 storeTitleIndex = (storeTitleIndex + 1) % titles.length;
-//                 rerender();
-//             }
-//         }, 'Change Title'),
-//         h(BookList, props),
-//         h(Footer, { footer: 'John Lennon © 2018'}),
-//     ]);
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -121,9 +97,9 @@ class HomePage extends React.Component {
             books: initialBookData
         }
     }
-    render() {
 
-        let snakify = (clickedBook) => {
+    render() {
+        let snakify = clickedBook => {
             let newBooks = this.state.books.map(book =>
                 (book.id === clickedBook.id) ?
                     Object.assign({}, book, {title: book.title + '🐍'})
@@ -132,6 +108,15 @@ class HomePage extends React.Component {
             );
             this.setState({ books: newBooks });
         };
+        let switchImageURL = clickedImage => {
+            let newBooks = this.state.books.map(book =>
+                (book.id === clickedImage.id) ?
+                    Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
+                :
+                    book
+            )
+            this.setState({ books: newBooks });
+        }
 
         return h('div', null, [
             h(Header, {text: titles[this.state.storeTitleIndex]}),
@@ -142,7 +127,7 @@ class HomePage extends React.Component {
                     });
                 }
             }, 'Change Title'),
-            h(BookList, { books: this.state.books, snakify: snakify }),
+            h(BookList, { books: this.state.books, snakify: snakify, switchImageURL: switchImageURL }),
             h(Footer, { footer: 'John Lennon © 2018'}),
         ]);
     };
