@@ -72,10 +72,11 @@ let BlogRow = props =>
                     ` in ${props.book.date}.`]),
                 h('p', { className: 'book-description' }, props.book.content),
                 h('button', {
+                    className: 'snake-button',
                     onClick: () => {
-                        props.snakify(props.book);
+                        props.snakeify(props.book);
                     }
-                }, ['Snakify'])
+                }, ['Snakeify!'])
             )
         )
     );
@@ -84,7 +85,7 @@ let BookList = props =>
     h('ul', { className: 'book-list' }, 
         props.books.map(book => h(BlogRow, { 
             book: book, 
-            snakify: props.snakify, 
+            snakeify: props.snakeify, 
             switchImageURL: props.switchImageURL 
         }))   
     );
@@ -109,7 +110,7 @@ class HomePage extends React.Component {
 
     render() {
 
-        let snakify = clickedBook => {
+        let snakeify = clickedBook => {
             let newBooks = this.state.books.map(book =>
                 (book.id === clickedBook.id) ?
                     Object.assign({}, book, {title: book.title + '🐍'})
@@ -137,14 +138,10 @@ class HomePage extends React.Component {
 
         return h('div', null, [
             h(Header, { text: titles[this.state.storeTitleIndex], switchTitle: switchTitle }),
-            h(BookList, { books: this.state.books, snakify: snakify, switchImageURL: switchImageURL }),
+            h(BookList, { books: this.state.books, snakeify: snakeify, switchImageURL: switchImageURL }),
             h(Footer, { footer: 'John Lennon © 2018'}),
         ]);
     };
 };
 
-let rerender = () => {
-    ReactDOM.render(h(HomePage, { data: initialBookData }), document.querySelector('.react-root'));
-};
-
-rerender();
+ReactDOM.render(h(HomePage, { data: initialBookData }), document.querySelector('.react-root'));

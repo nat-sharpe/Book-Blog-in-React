@@ -46,6 +46,19 @@ html, body {
     margin-top: 0;
 }
 
+.snake-button {
+    font-size: 1em;
+    color: white;
+    background-color: darkslateblue;
+    padding: .3em .8em;
+    cursor: pointer;
+}
+
+.snake-button:hover {
+    background-color: white;
+    color: darkslateblue;
+}
+
 .book-image {
     height: 12em;
     margin-right: 1em;
