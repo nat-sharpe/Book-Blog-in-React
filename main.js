@@ -1,4 +1,4 @@
-let bookData1 = [
+const initialBookData = [
     { 
         id: 1,
         title: 'Wind in the Willows',
@@ -33,7 +33,7 @@ let bookData1 = [
     },
 ];
 
-let bookData2 = [
+const bookData2 = [
     { title: 'Charge of the Light Brigade',
     author: 'George Patton',
     date: '1945',
@@ -48,7 +48,7 @@ let bookData2 = [
     },
 ];
 
-let titles = [
+const titles = [
     "GANDALF'S HALL OF RECORDS",
     "KERMIT'S GREEN MACHINE",
     "RONALD MCDONALD'S HOUSE OF KALE"
@@ -57,45 +57,34 @@ let titles = [
 const h = React.createElement;
 
 let switchImageURL = props => {
-    let newBooks = bookData1.map(book =>
+    let newBooks = initialBookData.map(book =>
         (book.id === props.id) ?
             Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
         :
             book
     )
-    bookData1 = newBooks;
+    initialBookData = newBooks;
 }
-
-let snakify = props => {
-    let newBooks = bookData1.map(book =>
-        (book.id === props.id) ?
-            Object.assign({}, book, {title: book.title + '🐍'})
-        :
-            book
-    );
-    bookData1 = newBooks;
-};
 
 let BlogRow = props =>
     h('li', { className: 'book-item' }, 
-        h('h2', { className: 'book-title' }, `${props.title}`,),
+        h('h2', { className: 'book-title' }, `${props.book.title}`,),
         h('div', { className: 'book-main' },
-            h('img', { className: 'book-image', src: props.imgURL, 
+            h('img', { className: 'book-image', src: props.book.imgURL, 
                 onClick: () => {
-                    switchImageURL(props);
+                    switchImageURL(props.book);
                     rerender();
                 }
             }),
             h('div', { className: 'book-body' }, 
                 h('h3', { className: 'sub-title' }, 
-                    [`${props.author} wrote `,
-                    h('em', null, props.title),
-                    ` in ${props.date}.`]),
-                h('p', { className: 'book-description' }, props.content),
+                    [`${props.book.author} wrote `,
+                    h('em', null, props.book.title),
+                    ` in ${props.book.date}.`]),
+                h('p', { className: 'book-description' }, props.book.content),
                 h('button', {
                     onClick: () => {
-                        snakify(props);
-                        rerender();
+                        props.snakify(props.book);
                     }
                 }, ['Snakify'])
             )
@@ -104,7 +93,7 @@ let BlogRow = props =>
 
 let BookList = props =>
     h('ul', { className: 'book-list' }, 
-        props.data.map(book => h(BlogRow, book))   
+        props.books.map(book => h(BlogRow, {book: book, snakify: props.snakify}))   
     );
 
 let Header = props => h('h1', { className: 'big-text' }, props.text);
@@ -128,10 +117,22 @@ class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            storeTitleIndex: 0
+            storeTitleIndex: 0,
+            books: initialBookData
         }
     }
     render() {
+
+        let snakify = (clickedBook) => {
+            let newBooks = this.state.books.map(book =>
+                (book.id === clickedBook.id) ?
+                    Object.assign({}, book, {title: book.title + '🐍'})
+                :
+                    book
+            );
+            this.setState({ books: newBooks });
+        };
+
         return h('div', null, [
             h(Header, {text: titles[this.state.storeTitleIndex]}),
             h('button', {
@@ -141,15 +142,14 @@ class HomePage extends React.Component {
                     });
                 }
             }, 'Change Title'),
-            h(BookList, this.props),
+            h(BookList, { books: this.state.books, snakify: snakify }),
             h(Footer, { footer: 'John Lennon © 2018'}),
         ]);
     };
 };
 
-
 let rerender = () => {
-    ReactDOM.render(h(HomePage, { data: bookData1 }), document.querySelector('.react-root'));
+    ReactDOM.render(h(HomePage, { data: initialBookData }), document.querySelector('.react-root'));
 };
 
 rerender();
