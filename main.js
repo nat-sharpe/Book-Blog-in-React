@@ -113,12 +113,12 @@ class HomePage extends React.Component {
     render() {
         
         let snakeify = clickedBook => {
-            let newBooks = this.state.books.map(book => {
+            let newBooks = this.state.books.map(book => 
                 (book.id === clickedBook.id) ?
                     Object.assign({}, book, {title: book.title + '🐍'})
                 :
                     book
-            });
+            );
             this.setState({ books: newBooks });
         };
 
@@ -143,6 +143,7 @@ class HomePage extends React.Component {
                 this.setState({ books: newBooks });
             }
         };
+    
 
         let switchTitle = () => {
             this.setState({
