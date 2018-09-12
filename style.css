@@ -16,6 +16,11 @@ html, body {
 .big-text {
     color: darkslateblue;
     text-align: center;
+    cursor: pointer;
+}
+
+.big-text:hover {
+    color: darkorange;
 }
 
 .book-list {

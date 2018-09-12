@@ -82,10 +82,19 @@ let BlogRow = props =>
 
 let BookList = props =>
     h('ul', { className: 'book-list' }, 
-        props.books.map(book => h(BlogRow, { book: book, snakify: props.snakify, switchImageURL: props.switchImageURL }))   
+        props.books.map(book => h(BlogRow, { 
+            book: book, 
+            snakify: props.snakify, 
+            switchImageURL: props.switchImageURL 
+        }))   
     );
 
-let Header = props => h('h1', { className: 'big-text' }, props.text);
+let Header = props => 
+    h('h1', { className: 'big-text', 
+        onClick: () => {
+            props.switchTitle();
+        }}, props.text
+    );
 
 let Footer = props => h('footer', { className: 'footer' }, props.footer);
 
@@ -99,6 +108,7 @@ class HomePage extends React.Component {
     }
 
     render() {
+
         let snakify = clickedBook => {
             let newBooks = this.state.books.map(book =>
                 (book.id === clickedBook.id) ?
@@ -108,25 +118,25 @@ class HomePage extends React.Component {
             );
             this.setState({ books: newBooks });
         };
+
         let switchImageURL = clickedImage => {
             let newBooks = this.state.books.map(book =>
                 (book.id === clickedImage.id) ?
                     Object.assign({}, book, {imgURL: 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg'})
                 :
                     book
-            )
+            );
             this.setState({ books: newBooks });
+        };
+
+        let switchTitle = () => {
+            this.setState({
+                storeTitleIndex: (this.state.storeTitleIndex + 1) % titles.length
+            });
         }
 
         return h('div', null, [
-            h(Header, {text: titles[this.state.storeTitleIndex]}),
-            h('button', {
-                onClick: () => {
-                    this.setState({
-                        storeTitleIndex: (this.state.storeTitleIndex + 1) % titles.length
-                    });
-                }
-            }, 'Change Title'),
+            h(Header, { text: titles[this.state.storeTitleIndex], switchTitle: switchTitle }),
             h(BookList, { books: this.state.books, snakify: snakify, switchImageURL: switchImageURL }),
             h(Footer, { footer: 'John Lennon © 2018'}),
         ]);
