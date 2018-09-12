@@ -48,7 +48,13 @@ let bookData2 = [
     },
 ];
 
-let h = React.createElement;
+let titles = [
+    "GANDALF'S HALL OF RECORDS",
+    "KERMIT'S GREEN MACHINE",
+    "RONALD MCDONALD'S HOUSE OF KALE"
+];
+
+const h = React.createElement;
 
 let switchImageURL = props => {
     let newBooks = bookData1.map(book =>
@@ -58,7 +64,6 @@ let switchImageURL = props => {
             book
     )
     bookData1 = newBooks;
-    rerender();
 }
 
 let snakify = props => {
@@ -69,7 +74,6 @@ let snakify = props => {
             book
     );
     bookData1 = newBooks;
-    rerender();
 };
 
 let BlogRow = props =>
@@ -77,7 +81,10 @@ let BlogRow = props =>
         h('h2', { className: 'book-title' }, `${props.title}`,),
         h('div', { className: 'book-main' },
             h('img', { className: 'book-image', src: props.imgURL, 
-                onClick: () => switchImageURL(props)
+                onClick: () => {
+                    switchImageURL(props);
+                    rerender();
+                }
             }),
             h('div', { className: 'book-body' }, 
                 h('h3', { className: 'sub-title' }, 
@@ -88,6 +95,7 @@ let BlogRow = props =>
                 h('button', {
                     onClick: () => {
                         snakify(props);
+                        rerender();
                     }
                 }, ['Snakify'])
             )
@@ -99,16 +107,46 @@ let BookList = props =>
         props.data.map(book => h(BlogRow, book))   
     );
 
-let Header = props => h('h1', { className: 'big-text' }, props.header);
+let Header = props => h('h1', { className: 'big-text' }, props.text);
 
 let Footer = props => h('footer', { className: 'footer' }, props.footer);
 
-let HomePage = (props) =>
-    h('div', null, [
-        h(Header, { header: 'SOME COOL BOOKS' }),
-        h(BookList, props),
-        h(Footer, { footer: 'John Lennon © 2018'}),
-    ]);
+// let HomePage = (props) =>
+//     h('div', null, [
+//         h(Header, props),
+//         h('button', {
+//             onClick: () => {
+//                 storeTitleIndex = (storeTitleIndex + 1) % titles.length;
+//                 rerender();
+//             }
+//         }, 'Change Title'),
+//         h(BookList, props),
+//         h(Footer, { footer: 'John Lennon © 2018'}),
+//     ]);
+
+class HomePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            storeTitleIndex: 0
+        }
+    }
+    render() {
+        return h('div', null, [
+            h(Header, {text: titles[this.state.storeTitleIndex]}),
+            h('button', {
+                onClick: () => {
+                    this.setState({
+                        storeTitleIndex: (this.state.storeTitleIndex + 1) % titles.length
+                    });
+                }
+            }, 'Change Title'),
+            h(BookList, this.props),
+            h(Footer, { footer: 'John Lennon © 2018'}),
+        ]);
+    };
+};
+
 
 let rerender = () => {
     ReactDOM.render(h(HomePage, { data: bookData1 }), document.querySelector('.react-root'));
