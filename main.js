@@ -58,7 +58,7 @@ const titles = [
 
 let BlogRow = props =>
     h('li', { className: 'book-item' }, 
-        h('h2', { className: 'book-title' }, `${props.book.title}`,),
+        h('h2', { className: 'book-title' }, `${props.book.title}`),
         h('div', { className: 'book-main' },
             h('img', { className: 'book-image', src: props.book.imgURL, 
                 onClick: () => {
@@ -94,12 +94,10 @@ let Header = props =>
     h('h1', { className: 'big-text', 
         onClick: () => {
             props.switchTitle();
-        }}, props.text
-    );
+        }
+    }, props.text);
 
 let Footer = props => h('footer', { className: 'footer' }, props.footer);
-
-let bookClicked = false; 
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -108,7 +106,7 @@ class HomePage extends React.Component {
             storeTitleIndex: 0,
             books: props.data
         }
-    }
+    };
 
     render() {
         
@@ -123,16 +121,7 @@ class HomePage extends React.Component {
         };
 
         let switchImageURL = clickedImage => {
-            let url;
-            if (bookClicked) {
-                this.props.data.forEach(book => {
-                    if (book.id === clickedImage.id) { url = book.imgURL } ;      
-                });
-                bookClicked = false;
-            } else {
-                url = 'https://i2.cdscdn.com/pdt2/4/6/0/1/700x700/9782351641460/rw/ceci-n-est-pas-un-livre.jpg';
-                bookClicked = true;
-            }
+            let url = 'https://images-eu.ssl-images-amazon.com/images/I/51LuYepFBtL._SX195_.jpg';
             let newBooks = this.state.books.map(book =>
                 (book.id === clickedImage.id) ?
                     Object.assign({}, book, {imgURL: url})
